@@ -1,0 +1,99 @@
+<div class="container">
+  <h1>To-Do Application</h1>
+
+  <hr />
+  <form (ngSubmit)="onSubmit()" #taskForm="ngForm">
+    <div class="form-group">
+      <label for="task">Task</label>
+      <input
+        type="text"
+        class="form-control"
+        id="taskName"
+        placeholder="Enter task"
+        [(ngModel)]="taskName"
+        name="taskName"
+        required
+      />
+      <small
+        *ngIf="taskForm.invalid && taskForm.dirty"
+        id="errorMessage"
+        class="form-text text-danger"
+        >Required field</small
+      >
+    </div>
+    <button
+      [disabled]="taskForm.invalid"
+      id="submitButton"
+      type="submit"
+      class="btn btn-primary"
+    >
+      Submit
+    </button>
+  </form>
+
+  <hr />
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Task</th>
+        <th scope="col">Completed</th>
+        <th scope="col">Edit</th>
+        <th scope="col">Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let t of taskArray; index as i">
+        <td *ngIf="!t.isEdited">{{ t.taskName }}</td>
+        <td *ngIf="t.isEdited">
+          <input
+            [(ngModel)]="taskInputName"
+            name="taskInput_{{ i }}"
+            id="taskInput_{{ i }}"
+            type="text"
+          />
+          <button
+            name="save_{{ i }}"
+            id="save_{{ i }}"
+            class="btn btn-danger btn-sm"
+            style="margin: 2px"
+            (click)="onSave(taskInputName, i)"
+          >
+            Save
+          </button>
+          <button
+            name="cancel_{{ i }}"
+            id="cancel_{{ i }}"
+            class="btn btn-danger btn-sm ml-2"
+            style="margin: 2px"
+            (click)="t.isEdited = false"
+          >
+            Cancel
+          </button>
+        </td>
+        <td>
+          <input (change)="onCheck(i)" id="completed_{{ i }}" type="checkbox" />
+        </td>
+        <td>
+          <button
+            class="btn btn-danger btn-sm"
+            id="edited_{{ i }}"
+            [disabled]="isTaskEdit"
+            (click)="onEdit(i)"
+          >
+            Edit
+          </button>
+        </td>
+        <td>
+          <button
+            class="btn btn-danger btn-sm"
+            id="deleted_{{ i }}"
+            (click)="onDelete(i)"
+          >
+            Delete
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
